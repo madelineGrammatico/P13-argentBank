@@ -1,0 +1,18 @@
+.errmsg {
+    color: hotpink;
+}
+
+.valid {
+    color: green;
+}
+
+.hide {
+    display: none;
+}
+.invalid {
+    color: red;
+}
+
+.offscreen {
+    display: none
+}
