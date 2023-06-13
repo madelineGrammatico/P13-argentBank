@@ -1,11 +1,14 @@
-import { Register } from "../Register/Register";
+import { LogIn } from "../LogIn/LogIn";
+// import { Register } from "../Register/Register";
 
 export function Accueil() {
     return (
         <>
         <h1>accueil</h1>
-        <Register/>
+        <LogIn/>
+        {/* <Register/> */}
         </>
+        
         
     )
 }

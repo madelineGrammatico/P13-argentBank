@@ -1,4 +1,4 @@
-import React from 'react'
+// import React from 'react'
 import ReactDOM from 'react-dom/client'
 
 import {
@@ -7,10 +7,12 @@ import {
   RouterProvider
 } from 'react-router-dom'
 
-import App from './App.tsx'
+import {Provider} from 'react-redux'
+
 import './index.css'
 import { RootLayout } from './layouts/RootLayout/RootLayout.tsx'
 import { Accueil } from "./layouts/Accueil/Accueil.tsx"
+import { store } from './app/store.ts'
 
 const router = createBrowserRouter([
   {
@@ -33,5 +35,7 @@ const router = createBrowserRouter([
   },
 ])
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
- <RouterProvider router={router}/>
+  <Provider store={store}>
+    <RouterProvider router={router}/>
+ </Provider>
 )

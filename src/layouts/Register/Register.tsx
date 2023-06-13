@@ -1,19 +1,24 @@
 import { useRef, useState, useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import styles from "./Register.module.css"
+import { modifyFistName } from "../../features/user/userSlice"
 
 const USER_REGEX = /^[A-Z][a-zA-Z0-9--]{3,23}$/
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/
 
 export function Register() {
-    const userFirstNameRef = useRef()
-    const userLastNameRef = useRef()
+    const user = useSelector((state) => state.user)
+    const dispatch = useDispatch()
+
+    // const userFirstNameRef = useRef()
+    // const userLastNameRef = useRef()
     const errRef = useRef()
 
-    const [userFirstName, setUserFirstName] = useState("")
+    const [inputFirstName, setInputFirstName] = useState("")
     const [validFirstName, setValidFirstName] = useState(false)
     const [userFirstNameFocus, setUserFirstNameFocus] = useState(false)
 
-    const [userLastName, setUserLastName] = useState("")
+    const [inputLastName, setInputLastName] = useState("")
     const [validLastName, setValidLastName] = useState(false)
     const [userLastNameFocus, setUserLastNameFocus] = useState(false)
 
@@ -29,14 +34,14 @@ export function Register() {
     const [succes, setSucces] = useState(false)
 
     useEffect(() => {
-        const result = USER_REGEX.test(userFirstName)
-        setValidFirstName(result)
-    }, [userFirstName])
+        const result = USER_REGEX.test(inputFirstName)
+        dispatch(modifyFistName(result))
+    }, [inputFirstName])
 
     useEffect(() => {
-        const result = USER_REGEX.test(userLastName)
-        setValidLastName(result)
-    }, [userLastName])
+        const result = USER_REGEX.test(inputLastName)
+        dispatch(modifyFistName(result))
+    }, [inputLastName])
 
     useEffect(() => {
         const result = PWD_REGEX.test(pwd)
@@ -52,8 +57,8 @@ export function Register() {
     const handleSumit = async (e: any) => {
         e.preventDefault()
         //if button enabled with Js hack
-        const v1 = USER_REGEX.test(userLastName)
-        const v2 = USER_REGEX.test(userFirstName)
+        const v1 = USER_REGEX.test(inputLastName)
+        const v2 = USER_REGEX.test(inputFirstName)
         const v3 = PWD_REGEX.test(pwd)
         if(!v1 || !v2 || !v3) {
             setErrMsg("Invalid Entry")
@@ -76,23 +81,23 @@ export function Register() {
                     <span className={ validLastName ? styles.valid : styles.hide}>
                         O
                     </span>
-                    <span className={ validLastName || !userLastName ? styles.hide : styles.invalid}>
+                    <span className={ validLastName || !inputLastName ? styles.hide : styles.invalid}>
                         X
                     </span>
                 </label>
                 <input
                     type="text"
                     id="lastName"
-                    ref={userLastNameRef}
+                    ref={inputLastNameRef}
                     autoComplete="off"
-                    onChange={(e)=> setUserLastName(e.target.value)}
+                    onChange={(e)=> setInputLastName(e.target.value)}
                     required
                     aria-invalid={validLastName ? "false" : "true" }
                     aria-describedby="lastnote"
                     onFocus={() => setUserLastNameFocus(true)}
                     onBlur={() => setUserLastNameFocus(false)}
                 ></input>
-                <p id ="lastnote" className={ userLastNameFocus && userLastName && !validLastName ?
+                <p id ="lastnote" className={ userLastNameFocus && inputLastName && !validLastName ?
                 "instructions" : styles.offscreen }>
                     4 à 24 caractères<br/>
                     Doit commencer par une lettre majuscule.<br/>
@@ -104,23 +109,23 @@ export function Register() {
                     <span className={ validFirstName ? styles.valid : styles.hide}>
                         O
                     </span>
-                    <span className={ validFirstName || !userFirstName ? styles.hide : styles.invalid}>
+                    <span className={ validFirstName || !inputFirstName ? styles.hide : styles.invalid}>
                         X
                     </span>
                 </label>
                 <input
                     type="text"
                     id="firstName"
-                    ref={userFirstNameRef}
+                    ref={inputFirstNameRef}
                     autoComplete="off"
-                    onChange={(e)=> setUserFirstName(e.target.value)}
+                    onChange={(e)=> setInputFirstName(e.target.value)}
                     required
                     aria-invalid={validFirstName ? "false" : "true" }
                     aria-describedby="firstnote"
                     onFocus={() => setUserFirstNameFocus(true)}
                     onBlur={() => setUserFirstNameFocus(false)}
                 ></input>
-                <p id ="firstnote" className={ userFirstNameFocus && userFirstName && !validFirstName ?
+                <p id ="firstnote" className={ userFirstNameFocus && inputFirstName && !validFirstName ?
                 "instructions" : styles.offscreen }>
                     4 à 24 caractères<br/>
                     Doit commencer par une lettre majuscule.<br/>
