@@ -26,9 +26,8 @@ export const userSlice = createSlice({
         modifyLastName:(state, action) => {
             state.lastName = action.payload
         },
-        connectUser: (state, action) => {
-            state.connected = true
-            // state.token = action.payload.token
+        setUser: (state, action) => {
+            state = action.payload
 
         },
         disconnectUser: (state, action) => {
@@ -43,7 +42,7 @@ export const {
     modifyFistName,
     modifyLastName,
     modifyPassword,
-    connectUser, 
+    setUser, 
     disconnectUser
 } = userSlice.actions;
 

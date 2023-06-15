@@ -1,13 +1,14 @@
 import { useRef, useState, useEffect} from 'react'
 import { useDispatch, useSelector } from "react-redux"
 
-import { connectUser, disconnectUser, modifyEmail, modifyPassword } from '../../features/user/userSlice' 
+
+import { disconnectUser, modifyEmail, modifyPassword, setUser } from '../../features/user/userSlice' 
 
 export function LogIn() {
     const user = useSelector((state) => state.user)
     const dispatch = useDispatch()   
-    const userRef = useRef()
-    const errRef = useRef()
+    // const userRef = useRef()
+    // const errRef = useRef()
 
     // const [email, setEmail] = useState("")
     // const [user, setUser] = useState("")
@@ -25,9 +26,26 @@ export function LogIn() {
 
     const handleSumit = async (e) => {
         e.preventDefault()
-        dispatch(connectUser)
+        const object = JSON.stringify({ email: user.email, password: user.password})
+    
+        await fetch("http://localhost:3001/api/v1/user/login",
+            {
+                method: "POST",
+                headers: {
+                    "accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: object
+            }
+        ).then((res) =>{
+            const data = res.json()
+            console.log(res)
+        })
+        // dispatch(setUser)
+        
         console.log(user)
-        setSucces(true)
+        // setSucces(true)
+        // setErrMsg("jkbkjb")
     }
     const handleDisconnect = async (e) => {
         e.preventDefault()
@@ -46,16 +64,15 @@ export function LogIn() {
                     </section>
                 ) : (
                     <section>
-                        <p ref={errRef} className={errMsg ? "errmsg" : "offscreen" }>
-                            { errMsg }
-                        </p>
+                        {errMsg !== "" && <p  className= "errmsg">{ errMsg }</p>}
+                        
                         <h1>Sign In</h1>
-                        <form onSubmit={handleSumit}>
+                        <form id="formElem" onSubmit={handleSumit}>
                             <label htmlFor="email">Email</label>
                             <input
                                 type="email"
                                 id="email"
-                                ref={userRef}
+                                name="email"
                                 onChange={(e) => dispatch(modifyEmail(e.target.value))}
                                 // value={email}
                                 required
@@ -65,7 +82,7 @@ export function LogIn() {
                             <input
                                 type="password"
                                 id="password"
-                                ref={userRef}
+                                name="password"
                                 onChange={(e) => dispatch(modifyPassword(e.target.value))}
                                 // value={pwd}
                                 required
