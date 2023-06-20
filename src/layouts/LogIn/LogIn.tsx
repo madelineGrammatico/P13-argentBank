@@ -1,24 +1,14 @@
-import { useRef, useState, useEffect} from 'react'
+import { useState, useEffect} from 'react'
 import { useDispatch, useSelector } from "react-redux"
 
-
-import { disconnectUser, modifyEmail, modifyPassword, setUser } from '../../features/user/userSlice' 
+import { disconnectUser, modifyEmail, modifyPassword } from '../../features/user/userSlice' 
+import { UseGetUserQuery } from '../../features/apiSlice'
 
 export function LogIn() {
     const user = useSelector((state) => state.user)
     const dispatch = useDispatch()   
-    // const userRef = useRef()
-    // const errRef = useRef()
-
-    // const [email, setEmail] = useState("")
-    // const [user, setUser] = useState("")
-    // const [pwd, setPwd] = useState("")
     const [errMsg, setErrMsg] = useState("")
     const [succes, setSucces] = useState(false)
-    
-    // useEffect(() => {
-    //     userRef.current.focus()
-    // }, [])
 
     useEffect(() => {
         setErrMsg("")
@@ -26,26 +16,31 @@ export function LogIn() {
 
     const handleSumit = async (e) => {
         e.preventDefault()
-        const object = JSON.stringify({ email: user.email, password: user.password})
-    
-        await fetch("http://localhost:3001/api/v1/user/login",
-            {
-                method: "POST",
-                headers: {
-                    "accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                body: object
-            }
-        ).then((res) =>{
-            const data = res.json()
-            console.log(res)
-        })
-        // dispatch(setUser)
+        const { userData } = UseGetUserQuery()
+        console.log(userData)
+        // const object = JSON.stringify({ email: user.email, password: user.password})
+        // try{
+        //     const response = await fetch("http://localhost:3001/api/v1/user/login",
+        //         {   
+        //             method:"POST",
+        //             headers: {
+        //                 "accept": "application/json",
+        //                 "Content-Type": "application/json"
+        //             },
+        //             body: object
+        //         }
+        //     )
+        //     const dataResponse = await response.json()
+        //     console.log(dataResponse)
+        //     if (dataResponse.status === 200) {
+        //         setSucces(true)
+        //     }
+        // } catch(error) {
+        //     console.log(error.message)
+        // }
         
-        console.log(user)
-        // setSucces(true)
-        // setErrMsg("jkbkjb")
+        // console.log(user) 
+
     }
     const handleDisconnect = async (e) => {
         e.preventDefault()
