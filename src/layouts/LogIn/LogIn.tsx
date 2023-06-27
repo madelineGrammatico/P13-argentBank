@@ -1,8 +1,9 @@
 import { useState, useEffect} from 'react'
 import { useDispatch, useSelector } from "react-redux"
+import { monAxios } from '../../features/utils/getCustomAxios'
 
-import { disconnectUser, modifyEmail, modifyPassword } from '../../features/user/userSlice' 
-import { UseGetUserQuery } from '../../features/apiSlice'
+import { connectedUser , disconnectUser, modifyEmail, modifyFistName, modifyId, modifyLastName, modifyPassword } from '../../features/user/userSlice' 
+// import { UseGetUserQuery } from '../../features/apiSlice'
 
 export function LogIn() {
     const user = useSelector((state) => state.user)
@@ -10,42 +11,64 @@ export function LogIn() {
     const [errMsg, setErrMsg] = useState("")
     const [succes, setSucces] = useState(false)
 
+    // const monAxios = getCustomAxios("http://localhost:3001/api/v1/", {
+    // headers: {
+    //     "accept": "application/json",
+    //     "Content-Type": "application/json"
+    // },
+    // })
+    // const { userData } = UseGetUserQuery()
+
     useEffect(() => {
         setErrMsg("")
     },[user.email, user.password])
 
     const handleSumit = async (e) => {
         e.preventDefault()
-        const { userData } = UseGetUserQuery()
-        console.log(userData)
-        // const object = JSON.stringify({ email: user.email, password: user.password})
-        // try{
-        //     const response = await fetch("http://localhost:3001/api/v1/user/login",
-        //         {   
-        //             method:"POST",
-        //             headers: {
-        //                 "accept": "application/json",
-        //                 "Content-Type": "application/json"
-        //             },
-        //             body: object
-        //         }
-        //     )
-        //     const dataResponse = await response.json()
-        //     console.log(dataResponse)
-        //     if (dataResponse.status === 200) {
-        //         setSucces(true)
-        //     }
-        // } catch(error) {
-        //     console.log(error.message)
-        // }
         
-        // console.log(user) 
+        // console.log(userData)
 
+        // const object = JSON.stringify({ email: user.email, password: user.password})
+        try{
+            await monAxios
+                .post("user/login", { body:{ email: user.email, password: user.password}})
+                .json()
+                .then((result) => {
+                    setSucces(true)
+                    console.log(result)
+                    localStorage.setItem('jwtToken', result.body.token)
+                    dispatch(connectedUser(true))
+                    
+                    
+                })
+            
+            await monAxios
+                .post("user/profile", { headers: {'Authorization': 'Bearer' + localStorage.getItem("jwtToken")}})
+                .json()
+                .then((result) => {
+                    console.log(result)
+                    dispatch(modifyFistName(result.body.firstName))
+                    dispatch(modifyLastName(result.body.lastName))
+                    dispatch(modifyId(result.body.id))
+                    
+                })
+
+            
+        } catch(error: any) {
+            console.log(error.message)
+        }
+        
+        console.log(user) 
+        console.log("----------------------")
     }
     const handleDisconnect = async (e) => {
         e.preventDefault()
-        dispatch(disconnectUser)
+        dispatch(disconnectUser())
         setSucces(false)
+        localStorage.clear()
+        // dispatch(connectedUser(false))
+        console.log(user)
+        console.log("----------------------")
     }
     return(
         <>

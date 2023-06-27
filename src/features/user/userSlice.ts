@@ -26,12 +26,15 @@ export const userSlice = createSlice({
         modifyLastName:(state, action) => {
             state.lastName = action.payload
         },
-        setUser: (state, action) => {
-            state = action.payload
-
+        modifyId:(state, action) => {
+            state.id = action.payload
         },
-        disconnectUser: (state, action) => {
+        connectedUser: (state, action) => {
+            state.connected = action.payload
+        },
+        disconnectUser: (state) => {
             state = initialState
+            console.log(state)
         }
     }
 })
@@ -42,7 +45,8 @@ export const {
     modifyFistName,
     modifyLastName,
     modifyPassword,
-    setUser, 
+    modifyId,
+    connectedUser, 
     disconnectUser
 } = userSlice.actions;
 
