@@ -6,6 +6,7 @@ const initialState = {
     firstName: "",
     lastName: "",
     connected: false,
+    rememberMe: false,
     token: "",
     id: null
 }
@@ -14,12 +15,12 @@ export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        modifyEmail:(state, action) => {
-            state.email = action.payload
-        },
-        modifyPassword:(state, action) => {
-            state.password = action.payload
-        },
+        // modifyEmail:(state, action) => {
+        //     state.email = action.payload
+        // },
+        // modifyPassword:(state, action) => {
+        //     state.password = action.payload
+        // },
         modifyFistName:(state, action) => {
             state.firstName = action.payload
         },
@@ -32,21 +33,24 @@ export const userSlice = createSlice({
         connectedUser: (state, action) => {
             state.connected = action.payload
         },
-        disconnectUser: (state) => {
-            state = initialState
-            console.log(state)
+        rememberMe: (state) => {
+            state.rememberMe = true
+        },
+        disconnectUser: () => {
+            return initialState
         }
     }
 })
 
 
 export const { 
-    modifyEmail,
+    // modifyEmail,
     modifyFistName,
     modifyLastName,
-    modifyPassword,
+    // modifyPassword,
     modifyId,
-    connectedUser, 
+    connectedUser,
+    rememberMe,
     disconnectUser
 } = userSlice.actions;
 

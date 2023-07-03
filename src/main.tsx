@@ -8,13 +8,13 @@ import {
 } from 'react-router-dom'
 
 import {Provider} from 'react-redux'
-import {ApiProvider} from '@reduxjs/toolkit'
 
 import './index.css'
 import { RootLayout } from './layouts/RootLayout/RootLayout.tsx'
 import { Accueil } from "./layouts/Accueil/Accueil.tsx"
+import { Profile } from "./layouts/Profile/Profile.tsx"
 import { store } from './app/store.ts'
-import { userApi } from './features/apiSlice.ts'
+import { LogIn } from './layouts/LogIn/LogIn.tsx'
 
 const router = createBrowserRouter([
   {
@@ -30,16 +30,19 @@ const router = createBrowserRouter([
         element: <Accueil/>
       },
       {
-        path: "/transactions",
-        element: <></>
+        path: "/profil",
+        element: <Profile/>
+      },
+      {
+        path: "/login",
+        element: <LogIn/>
       }
+
     ]
   },
 ])
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Provider store={store}>
-    {/* <ApiProvider api={userApi}> */}
     <RouterProvider router={router}/>
-    {/* </ApiProvider> */}
  </Provider>
 )

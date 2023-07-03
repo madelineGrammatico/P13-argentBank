@@ -2,15 +2,17 @@ export const getCustomAxios = (baseUrl: string, defaultRequest: RequestInit) => 
     const { headers, ...rest } = defaultRequest
 
 
-    const fetchi = (url: string, config: RequestInit) => {
+    const fetch = (url: string, config: RequestInit) => {
         const promise = window.fetch(baseUrl + url, {
             ...rest,
             ...config,
             headers: {
                 ...headers,
-                ...config.headers,
+                ...config.body,
             },
+            
         })
+        console.log(headers)
 
         return {
             json: async () => {
@@ -33,10 +35,10 @@ export const getCustomAxios = (baseUrl: string, defaultRequest: RequestInit) => 
 
     return {
         get: (url: string, config?: RequestInit) => {
-            return fetchi(url, {...config, method: 'GET'})
+            return fetch(url, {...config, method: 'GET'})
         },
         post: (url: string, config?: RequestInit) => {
-            return fetchi(url, {
+            return fetch(url, {
                 // ...config,
                 method:'Post',
                 body: JSON.stringify(config?.body),
