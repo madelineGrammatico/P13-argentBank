@@ -1,5 +1,6 @@
 import { useSelector, useDispatch} from "react-redux"
 import { disconnectUser } from "../../features/user/userSlice"
+import { Navigate } from "react-router-dom"
 
 import styles from "./NavBar.module.css"
 
@@ -13,6 +14,8 @@ export function NavBar() {
         e.preventDefault()
         dispatch(disconnectUser())
         localStorage.clear()
+    
+
         // dispatch(connectedUser(false))
         console.log(user)
         console.log("----------------------")
@@ -36,10 +39,10 @@ export function NavBar() {
         </div>
   
         {
-            !user.connected ? 
-                <a href="./login">login</a> 
+            localStorage.getItem("jwtToken") || sessionStorage.getItem("jwtToken")? 
+              <button onClick={handleDisconnect}>deconnect</button>
             : 
-                <button onClick={handleDisconnect}>deconnect</button>
+              <a href="/login">login</a> 
         }
         
     </nav>

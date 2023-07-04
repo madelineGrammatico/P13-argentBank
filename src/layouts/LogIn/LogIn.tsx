@@ -1,4 +1,5 @@
 import { useState, useEffect} from 'react'
+import { Navigate } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux"
 import { monAxios } from '../../features/utils/getCustomAxios'
 
@@ -9,9 +10,9 @@ import {
     disconnectUser,
     rememberMe,
     // modifyEmail, 
-    modifyFistName, 
-    modifyId, 
-    modifyLastName, 
+    // modifyFistName, 
+    // modifyId, 
+    // modifyLastName, 
     // modifyPassword 
 } from '../../features/user/userSlice' 
 // import { UseGetUserQuery } from '../../features/apiSlice'
@@ -37,7 +38,6 @@ export function LogIn() {
                 .post("user/login", { body:{ email: emailInput, password: pwdInput}})
                 .json()
                 .then((result) => {
-                    console.log(result)
                     // dispatch(modifyEmail(emailInput))
                     // dispatch(modifyEmail(pwdInput))
                     dispatch(connectedUser(true))
@@ -45,18 +45,25 @@ export function LogIn() {
                         dispatch(rememberMe())
                         localStorage.setItem('jwtToken', result.body.token)
                     }
+                    console.log(localStorage.getItem("jwtToken"))
+                    // if (localStorage.jwtToken) {
+                    //     console.log("connecté")
+                    //     // return redirect("/profile")
+                    //     return
+                    // }
+                    console.log("try again")
                 })
             
-            await monAxios
-                .post("user/profile", { headers: {'Authorization': 'Bearer' + localStorage.getItem("jwtToken")}})
-                .json()
-                .then((result) => {
-                    console.log(result)
-                    dispatch(modifyFistName(result.body.firstName))
-                    dispatch(modifyLastName(result.body.lastName))
-                    dispatch(modifyId(result.body.id))
+            // await monAxios
+            //     .post("user/profile", { headers: {'Authorization': 'Bearer' + localStorage.getItem("jwtToken")}})
+            //     .json()
+            //     .then((result) => {
+            //         console.log(result)
+            //         dispatch(modifyFistName(result.body.firstName))
+            //         dispatch(modifyLastName(result.body.lastName))
+            //         dispatch(modifyId(result.body.id))
                     
-                })
+            //     })
 
             
         } catch(error: any) {
@@ -76,19 +83,22 @@ export function LogIn() {
     }
     return(
         <>
-            { user.connected ? (
-                    <main className={styles["main bg-dark"]}>
-                        <h1>You are connected</h1>
-                        <p>
-                            <a href="/">Go home</a>
-                        </p>
-                        <button onClick={handleDisconnect}>disconnect</button>
-                    </main>
-                ) : (
-                    <main className={styles["bg-dark"]}>
-                        <section className={styles["sign-in-content"]}>
-
-                            {errMsg !== "" && <p  className= "errmsg">{ errMsg }</p>}
+            <main className={styles["bg-dark"]}>
+                <section className={styles["sign-in-content"]}>
+                    {/* { user.connected ? (
+                        <>
+                            <h1>You are connected</h1>
+                            <p>
+                                <a href="/">Go home</a>
+                            </p>
+                            <button onClick={handleDisconnect}>disconnect</button>
+                        </>
+                    ) : ( */}
+                        <>
+                            { errMsg !== "" && <p  className= "errmsg">{ errMsg }</p> }
+                            { (user.connected || localStorage.getItem("jwtToken") || sessionStorage.getItem("jwtToken"))&& (
+                                <Navigate to="/profile" replace={true}/>
+                            )}
 
                             <i className="fa fa-user-circle sign-in-icon"/>
                             <h1>Sign In</h1>
@@ -101,7 +111,6 @@ export function LogIn() {
                                         id="email"
                                         name="email"
                                         onChange={(e) => setEmailInput(e.target.value)}
-                                        // value={email}
                                         required
                                     />
                                 </div>
@@ -113,7 +122,6 @@ export function LogIn() {
                                         id="password"
                                         name="password"
                                         onChange={(e) => setPwdInput(e.target.value)}
-                                        // value={pwd}
                                         required
                                     />
                                 </div>
@@ -127,10 +135,11 @@ export function LogIn() {
                                     Sign In
                                 </button>
                             </form>
-                        </section>                        
-                    </main>
-                )
-            }
+                        </>
+                    {/* )} */}
+                </section>
+                    
+            </main>
             
         </>
         
