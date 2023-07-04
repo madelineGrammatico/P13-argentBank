@@ -1,10 +1,32 @@
+import { useState, useEffect} from 'react'
+import { Navigate } from 'react-router-dom'
+import { useDispatch, useSelector } from "react-redux"
+import { monAxios } from '../../features/utils/getCustomAxios'
+
 import styles from "./Profile.module.css"
 
-export function Profile() {
+import { 
+  connectedUser, 
+  disconnectUser,
+  rememberMe,
+  // modifyEmail, 
+  // modifyFistName, 
+  // modifyId, 
+  // modifyLastName, 
+  // modifyPassword 
+} from '../../features/user/userSlice' 
 
-  
+export function Profile() {
+  const user = useSelector((state) => state.user)
+    const dispatch = useDispatch() 
+
+    
   return (
+    
     <main className={styles["main bg-dark"]}>
+    {
+      (!user.connected || !localStorage.getItem("jwtToken"))  && <Navigate to="/login"/>
+    }
     <div className={styles["header"]}>
       <h1>Welcome back<br />Tony Jarvis!</h1>
       <button className={styles["edit-button"]}>Edit Name</button>
