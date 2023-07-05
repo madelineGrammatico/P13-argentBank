@@ -8,7 +8,7 @@ export const getCustomAxios = (baseUrl: string, defaultRequest: RequestInit) => 
             ...config,
             headers: {
                 ...headers,
-                ...config.body,
+                ...config.headers,
             },
             
         })
@@ -38,6 +38,7 @@ export const getCustomAxios = (baseUrl: string, defaultRequest: RequestInit) => 
             return fetch(url, {...config, method: 'GET'})
         },
         post: (url: string, config?: RequestInit) => {
+            // console.log(config?.headers)
             return fetch(url, {
                 // ...config,
                 method:'Post',

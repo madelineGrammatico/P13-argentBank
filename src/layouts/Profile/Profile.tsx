@@ -1,35 +1,57 @@
-import { useState, useEffect} from 'react'
-import { Navigate } from 'react-router-dom'
+// import { useEffect} from 'react'
+// import { Navigate, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux"
 import { monAxios } from '../../features/utils/getCustomAxios'
 
 import styles from "./Profile.module.css"
+import { StorageOver } from "../../features/utils/storage"
 
 import { 
-  connectedUser, 
-  disconnectUser,
-  rememberMe,
+  // connectedUser, 
+  // disconnectUser,
+  // rememberMe,
   // modifyEmail, 
-  // modifyFistName, 
-  // modifyId, 
-  // modifyLastName, 
-  // modifyPassword 
+  modifyFistName, 
+  modifyId, 
+  modifyLastName, 
 } from '../../features/user/userSlice' 
+import { NavLink, Outlet } from "react-router-dom"
 
 export function Profile() {
   const user = useSelector((state) => state.user)
-    const dispatch = useDispatch() 
+  const dispatch = useDispatch() 
+  // const navigate = useNavigate()
 
+    async function getData() {
+      try {
+        await monAxios
+          .post("user/profile", { headers: {'Authorization': 'Bearer' + StorageOver.getItem("jwtToken")}})
+          .json()
+          .then((result) => {
+              console.log(result)
+              console.log(result.body)
+
+              dispatch(modifyFistName(result.body.firstName))
+              dispatch(modifyLastName(result.body.lastName))
+              dispatch(modifyId(result.body.id))
+          
+          })
+      } catch(error: any) {
+        console.log(error.message)
+      }
+    }
+    getData()
+  
     
+  
+
   return (
     
-    <main className={styles["main bg-dark"]}>
-    {
-      (!user.connected || !localStorage.getItem("jwtToken"))  && <Navigate to="/login"/>
-    }
+    <main className={styles["bg-dark"]}>
     <div className={styles["header"]}>
-      <h1>Welcome back<br />Tony Jarvis!</h1>
+      <h1>Welcome back<br />{user.firstName} {user.lastName}!</h1>
       <button className={styles["edit-button"]}>Edit Name</button>
+      <Outlet/>
     </div>
     <h2 className={styles["sr-only"]}>Accounts</h2>
     <section className={styles["account"]}>

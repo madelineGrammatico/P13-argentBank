@@ -1,5 +1,5 @@
 import { useState, useEffect} from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux"
 import { monAxios } from '../../features/utils/getCustomAxios'
 
@@ -8,23 +8,29 @@ import styles from "./LogIn.module.css"
 import { 
     connectedUser, 
     disconnectUser,
-    rememberMe,
+    // rememberMe,
     // modifyEmail, 
     // modifyFistName, 
     // modifyId, 
     // modifyLastName, 
-    // modifyPassword 
 } from '../../features/user/userSlice' 
+import { storageToken, StorageOver } from '../../features/utils/storage'
 // import { UseGetUserQuery } from '../../features/apiSlice'
 
 export function LogIn() {
     const user = useSelector((state) => state.user)
     const dispatch = useDispatch() 
-
+    const navigate = useNavigate()
+    
     const [errMsg, setErrMsg] = useState("")
     const [emailInput, setEmailInput] = useState("")
     const [pwdInput, setPwdInput] = useState("")
     
+    useEffect(() => {
+        if (StorageOver.getItem("jwtToken")) {
+          navigate("/profile")
+        }
+      }, [StorageOver])
 
     useEffect(() => {
         setErrMsg("")
@@ -39,18 +45,15 @@ export function LogIn() {
                 .json()
                 .then((result) => {
                     // dispatch(modifyEmail(emailInput))
-                    // dispatch(modifyEmail(pwdInput))
                     dispatch(connectedUser(true))
-                    if (e.target.rememberMe.checked) {
-                        dispatch(rememberMe())
-                        localStorage.setItem('jwtToken', result.body.token)
-                    }
-                    console.log(localStorage.getItem("jwtToken"))
-                    // if (localStorage.jwtToken) {
-                    //     console.log("connecté")
-                    //     // return redirect("/profile")
-                    //     return
+                    // if (e.target.rememberMe.checked) {
+                    //     dispatch(rememberMe())
+                    //     localStorage.setItem('jwtToken', result.body.token)
                     // }
+                    StorageOver.setItem("jwtToken", result.body.token , e.target.rememberMe.checked )
+                    // storageToken.setItem("jwtToken", result.body.token , e.target.rememberMe.checked )
+
+                    console.log(StorageOver.getItem("jwtToken"))
                     console.log("try again")
                 })
             
@@ -77,7 +80,8 @@ export function LogIn() {
     const handleDisconnect = async (e) => {
         e.preventDefault()
         dispatch(disconnectUser())
-        localStorage.clear()
+        StorageOver.clear()
+        
         console.log(user)
         console.log("----------------------")
     }
@@ -96,8 +100,10 @@ export function LogIn() {
                     ) : ( */}
                         <>
                             { errMsg !== "" && <p  className= "errmsg">{ errMsg }</p> }
-                            { (user.connected || localStorage.getItem("jwtToken") || sessionStorage.getItem("jwtToken"))&& (
-                                <Navigate to="/profile" replace={true}/>
+                            { (
+                                StorageOver.getItem('jwtToken')
+                                ) && (
+                                <Navigate to="/profile" />
                             )}
 
                             <i className="fa fa-user-circle sign-in-icon"/>

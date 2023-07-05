@@ -1,9 +1,9 @@
 import { redirect } from "react-router-dom"
+import { StorageOver } from "../../utils/storage"
 
 export const  profileLoader = () => {
-    console.log(localStorage.getItem("jwtToken"))
-    if (localStorage.getItem("jwtToken") === null && sessionStorage.getItem("jwtToken") === null) {
-        console.log("j'ai plus un token!!")
+    if (StorageOver.getItem("jwtToken") === null) {
+        console.log("j'ai pas de token!!")
         return redirect("/login")
     }
     return null

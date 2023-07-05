@@ -15,7 +15,8 @@ import { Accueil } from "./layouts/Accueil/Accueil.tsx"
 import { Profile } from "./layouts/Profile/Profile.tsx"
 import { store } from './app/store.ts'
 import { LogIn } from './layouts/LogIn/LogIn.tsx'
-import { loginLoader } from './features/router/loaders/loginLoader.tsx'
+import { EditUser } from './layouts/EditUser/EditUser.tsx'
+// import { loginLoader } from './features/router/loaders/loginLoader.tsx'
 import { profileLoader } from './features/router/loaders/profileLoader.tsx'
 
 const router = createBrowserRouter([
@@ -34,11 +35,16 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         loader: profileLoader,
-        element: <Profile/>
+        element: <Profile/>,
+        children: [
+          {
+            path: "/profile/user",
+            element:<EditUser/>
+          }
+        ]
       },
       {
         path: "/login",
-        loader:  loginLoader,
         element: <LogIn/>
       }
 
