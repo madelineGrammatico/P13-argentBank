@@ -1,5 +1,5 @@
 // import { useEffect} from 'react'
-// import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux"
 import { monAxios } from '../../features/utils/getCustomAxios'
 
@@ -16,11 +16,12 @@ import {
   modifyLastName, 
 } from '../../features/user/userSlice' 
 import { NavLink, Outlet } from "react-router-dom"
+import { Greetings } from '../Greetings/Greetings'
 
-export function Profile() {
+export function Profile(props) {
   const user = useSelector((state) => state.user)
   const dispatch = useDispatch() 
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
     async function getData() {
       try {
@@ -41,17 +42,15 @@ export function Profile() {
       }
     }
     getData()
-  
-    
+    // console.log(window.location.pathname)
   
 
   return (
     
     <main className={styles["bg-dark"]}>
     <div className={styles["header"]}>
-      <h1>Welcome back<br />{user.firstName} {user.lastName}!</h1>
-      <button className={styles["edit-button"]}>Edit Name</button>
-      <Outlet/>
+      { window.location.pathname==="/profile/user"? 
+      <Outlet/> : <Greetings/> }
     </div>
     <h2 className={styles["sr-only"]}>Accounts</h2>
     <section className={styles["account"]}>

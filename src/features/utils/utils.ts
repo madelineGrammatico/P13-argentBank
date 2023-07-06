@@ -1,3 +1,0 @@
-export setAuthorizationToken(token) {
-    
-}

@@ -16,6 +16,7 @@ import { Profile } from "./layouts/Profile/Profile.tsx"
 import { store } from './app/store.ts'
 import { LogIn } from './layouts/LogIn/LogIn.tsx'
 import { EditUser } from './layouts/EditUser/EditUser.tsx'
+import { Greetings } from "./layouts/Greetings/Greetings.tsx"
 // import { loginLoader } from './features/router/loaders/loginLoader.tsx'
 import { profileLoader } from './features/router/loaders/profileLoader.tsx'
 

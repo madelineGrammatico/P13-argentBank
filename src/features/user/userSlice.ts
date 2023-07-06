@@ -1,6 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+ export type User = {
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    connected: boolean,
+    rememberMe: boolean,
+    token: string ,
+    id: string,
+}
+const initialState: User = {
     email: "",
     password: "",
     firstName: "",
@@ -8,16 +18,19 @@ const initialState = {
     connected: false,
     rememberMe: false,
     token: "",
-    id: null
+    id: ""
 }
 
 export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        // modifyEmail:(state, action) => {
-        //     state.email = action.payload
-        // },
+        modifyEmail:(state, action) => {
+            state.email = action.payload
+        },
+        modifyPassword:(state, action) => {
+            state.password = action.payload
+        },
         modifyFistName:(state, action) => {
             state.firstName = action.payload
         },
@@ -30,9 +43,9 @@ export const userSlice = createSlice({
         connectedUser: (state, action) => {
             state.connected = action.payload
         },
-        // rememberMe: (state) => {
-        //     state.rememberMe = true
-        // },
+        rememberMe: (state) => {
+            state.rememberMe = true
+        },
         disconnectUser: () => {
             return initialState
         }
@@ -41,12 +54,13 @@ export const userSlice = createSlice({
 
 
 export const { 
-    // modifyEmail,
+    modifyEmail,
+    modifyPassword,
     modifyFistName,
     modifyLastName,
     modifyId,
     connectedUser,
-    // rememberMe,
+    rememberMe,
     disconnectUser
 } = userSlice.actions;
 

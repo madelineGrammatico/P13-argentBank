@@ -8,13 +8,14 @@ import styles from "./LogIn.module.css"
 import { 
     connectedUser, 
     disconnectUser,
-    // rememberMe,
-    // modifyEmail, 
+    rememberMe,
+    modifyEmail,
+    modifyPassword, 
     // modifyFistName, 
     // modifyId, 
     // modifyLastName, 
 } from '../../features/user/userSlice' 
-import { storageToken, StorageOver } from '../../features/utils/storage'
+import { StorageOver } from '../../features/utils/storage'
 // import { UseGetUserQuery } from '../../features/apiSlice'
 
 export function LogIn() {
@@ -36,7 +37,7 @@ export function LogIn() {
         setErrMsg("")
     }, [ emailInput, pwdInput ])
 
-    const handleSumit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         console.log(e.target.rememberMe.checked)
         try{
@@ -44,17 +45,14 @@ export function LogIn() {
                 .post("user/login", { body:{ email: emailInput, password: pwdInput}})
                 .json()
                 .then((result) => {
-                    // dispatch(modifyEmail(emailInput))
+                    dispatch(modifyEmail(emailInput))
+                    dispatch(modifyPassword(pwdInput))
                     dispatch(connectedUser(true))
-                    // if (e.target.rememberMe.checked) {
-                    //     dispatch(rememberMe())
-                    //     localStorage.setItem('jwtToken', result.body.token)
-                    // }
+                    if (e.target.rememberMe.checked) {
+                        dispatch(rememberMe())
+                    }
                     StorageOver.setItem("jwtToken", result.body.token , e.target.rememberMe.checked )
-                    // storageToken.setItem("jwtToken", result.body.token , e.target.rememberMe.checked )
-
-                    console.log(StorageOver.getItem("jwtToken"))
-                    console.log("try again")
+                    console.log(result)
                 })
             
             // await monAxios
@@ -109,7 +107,7 @@ export function LogIn() {
                             <i className="fa fa-user-circle sign-in-icon"/>
                             <h1>Sign In</h1>
 
-                            <form id="formElem" onSubmit={handleSumit}>
+                            <form id="formElem" onSubmit={handleSubmit}>
                                 <div className={styles["input-wrapper"]}>
                                     <label htmlFor="email">Email</label>
                                     <input
