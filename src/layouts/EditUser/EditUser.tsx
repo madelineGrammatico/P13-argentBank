@@ -16,6 +16,8 @@ import {
 } from '../../features/user/userSlice' 
 // import { User } from "../../features/user/userSlice"
 
+import styles from "./EditUser.module.css"
+
 export function EditUser() {
     const user = useSelector((state) => state.user)
     const dispatch = useDispatch()
@@ -60,19 +62,23 @@ export function EditUser() {
   return (
     <form>
         <h2>Welcome back</h2>
-        <div>
+        <div className={styles["input-wrapper"]}>
+            <label htmlFor="firstName" hidden>First Name</label>
             <input 
                 type="text" 
                 name="firstName"
+                placeholder={firstNameInput}
                 onChange={(e) => setFirstNameInput(e.target.value)}
             />
+            <label htmlFor="lastName" hidden>Last Name</label>
             <input 
                 type="text"
                 name="lastName"
+                placeholder={lastNameInput}
                 onChange={(e) => setLastNameInput(e.target.value)}
             />
         </div>
-        <div>
+        <div className={styles["input-wrapper"]}>
             <button onClick={handleSubmit}>Save</button>
             <button onClick={handleCancel}>Cancel</button>
         </div>
