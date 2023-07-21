@@ -1,6 +1,6 @@
 // import { useEffect} from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from "react-redux"
+import { useState } from 'react'
+import { useDispatch } from "react-redux"
 import { monAxios } from '../../features/utils/getCustomAxios'
 
 import styles from "./Profile.module.css"
@@ -11,46 +11,45 @@ import {
   // disconnectUser,
   // rememberMe,
   // modifyEmail, 
-  modifyFistName, 
-  modifyId, 
-  modifyLastName, 
+  modifyFistName,
+  modifyId,
+  modifyLastName,
 } from '../../features/user/userSlice' 
-import { NavLink, Outlet } from "react-router-dom"
 import { Greetings } from '../Greetings/Greetings'
+import { EditUser } from '../EditUser/EditUser'
 
-export function Profile(props) {
-  const user = useSelector((state) => state.user)
+export function Profile() {
   const dispatch = useDispatch() 
-  const navigate = useNavigate()
+  const [showEditCompoment, setShowEditComponent] = useState(false)
 
-    async function getData() {
-      try {
-        await monAxios
-          .post("user/profile", { headers: {'Authorization': 'Bearer' + StorageOver.getItem("jwtToken")}})
-          .json()
-          .then((result) => {
-              console.log(result)
-              console.log(result.body)
+  async function getData() {
+    try {
+      await monAxios
+        .post("user/profile", { headers: {'Authorization': 'Bearer' + StorageOver.getItem("jwtToken")}})
+        .json()
+        .then((result) => {
+            console.log(result)
+            console.log(result.body)
 
-              dispatch(modifyFistName(result.body.firstName))
-              dispatch(modifyLastName(result.body.lastName))
-              dispatch(modifyId(result.body.id))
-          
-          })
-      } catch(error: any) {
-        console.log(error.message)
-      }
+            dispatch(modifyFistName(result.body.firstName))
+            dispatch(modifyLastName(result.body.lastName))
+            dispatch(modifyId(result.body.id))
+        
+        })
+    } catch(error: any) {
+      console.log(error.message)
     }
-    getData()
-    // console.log(window.location.pathname)
-  
+  }
+  getData()
 
   return (
     
     <main className={styles["bg-dark"]}>
       <header className={styles["header"]}>
-        { window.location.pathname==="/profile/user"? 
-        <Outlet/> : <Greetings/> }
+        {
+          showEditCompoment? <EditUser setShowEditComponent={setShowEditComponent}/> : 
+          <Greetings setShowEditComponent={setShowEditComponent}/>
+        }
       </header>
       <h2 className={styles["sr-only"]}>Accounts</h2>
       <section className={styles["account"]}>
