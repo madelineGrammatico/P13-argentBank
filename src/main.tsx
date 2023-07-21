@@ -23,10 +23,10 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="accueil" replace/>,
+        element: <Navigate to="/home" replace/>,
       },
       {
-        path: "/accueil",
+        path: "/home",
         element: <Accueil/>
       },
       {

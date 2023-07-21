@@ -7,9 +7,6 @@ import styles from "./LogIn.module.css"
 
 import { 
     connectedUser,
-    rememberMe,
-    modifyEmail,
-    modifyPassword,
 } from '../../features/user/userSlice' 
 import { StorageOver } from '../../features/utils/storage'
 
@@ -24,7 +21,7 @@ export function LogIn() {
         if (StorageOver.getItem("jwtToken")) {
           navigate("/profile")
         }
-      }, [StorageOver])
+      }, [user])
 
     useEffect(() => {
         setErrMsg("")
@@ -45,12 +42,7 @@ export function LogIn() {
                 )
                 .json()
                 .then((result) => {
-                    dispatch(modifyEmail(e.target.email.value))
-                    dispatch(modifyPassword(e.target.password.value))
                     dispatch(connectedUser(true))
-                    if (e.target.rememberMe.checked) {
-                        dispatch(rememberMe())
-                    }
                     StorageOver.setItem("jwtToken", result.body.token , e.target.rememberMe.checked )
                 })
             
@@ -59,18 +51,15 @@ export function LogIn() {
         }
     }
 
+    const errorMessage = (errMsg !== "")? <p  className= "errmsg">{ errMsg }</p> : null 
+
     return(
         <>
             <main className={styles["bg-dark"]}>
                 <section className={styles["sign-in-content"]}>
                         <>
-                            { errMsg !== "" && <p  className= "errmsg">{ errMsg }</p> }
-                            { (
-                                StorageOver.getItem('jwtToken')
-                                ) && (
-                                <Navigate to="/profile" />
-                            )}
-
+                            { errorMessage}
+                            
                             <i className="fa fa-user-circle sign-in-icon"/>
                             <h1>Sign In</h1>
 
@@ -104,10 +93,7 @@ export function LogIn() {
                             </form>
                         </>
                 </section>
-                    
             </main>
-            
         </>
-        
     )
 }

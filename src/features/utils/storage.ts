@@ -1,4 +1,7 @@
 export class StorageOver {
+    static isStorage(key: string) {
+        return (sessionStorage.getItem(key) !== null || localStorage.getItem(key) !== null )
+    }
     static setItem(key: string, value:string, useLocalStorage: boolean) {
         const storage = useLocalStorage? localStorage : sessionStorage
         storage.setItem(key, value)

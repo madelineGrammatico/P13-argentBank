@@ -3,21 +3,18 @@ import { useSelector, useDispatch } from "react-redux"
 import { StorageOver } from "../../features/utils/storage"
 import { monAxios } from '../../features/utils/getCustomAxios'
 import { 
-    modifyEmail,
     modifyFistName, 
-    modifyId, 
     modifyLastName, 
 } from '../../features/user/userSlice' 
 
 import styles from "./EditUser.module.css"
 
-export function EditUser({setShowEditComponent}) {
+export function EditUser({ setShowEditComponent }) {
     const user = useSelector((state) => state.user)
     const dispatch = useDispatch()
 
     const handleSubmit = async(e) => {
         e.preventDefault()
-        console.log(e.target.form.firstName.value)
         try{
             await monAxios
                 .put("user/profile", 
@@ -30,8 +27,6 @@ export function EditUser({setShowEditComponent}) {
                     })
                 .json()
                 .then((result) => {
-                    dispatch(modifyEmail(result.body.email))
-                    dispatch(modifyId(result.body.id))
                     dispatch(modifyFistName(result.body.firstName))
                     dispatch(modifyLastName(result.body.lastName))
                 })
@@ -60,7 +55,7 @@ export function EditUser({setShowEditComponent}) {
             />
         </div>
         <div className={styles["input-wrapper"]}>
-            <button onClick={handleSubmit}>Save</button>
+            <button onClick={ handleSubmit }>Save</button>
             <button onClick={() => setShowEditComponent(false)}>Cancel</button>
         </div>
         
