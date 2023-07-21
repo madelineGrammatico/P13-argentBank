@@ -6,17 +6,12 @@ import { monAxios } from '../../features/utils/getCustomAxios'
 import styles from "./LogIn.module.css"
 
 import { 
-    connectedUser, 
-    disconnectUser,
+    connectedUser,
     rememberMe,
     modifyEmail,
-    modifyPassword, 
-    // modifyFistName, 
-    // modifyId, 
-    // modifyLastName, 
+    modifyPassword,
 } from '../../features/user/userSlice' 
 import { StorageOver } from '../../features/utils/storage'
-// import { UseGetUserQuery } from '../../features/apiSlice'
 
 export function LogIn() {
     const user = useSelector((state) => state.user)
@@ -24,8 +19,6 @@ export function LogIn() {
     const navigate = useNavigate()
     
     const [errMsg, setErrMsg] = useState("")
-    const [emailInput, setEmailInput] = useState("")
-    const [pwdInput, setPwdInput] = useState("")
     
     useEffect(() => {
         if (StorageOver.getItem("jwtToken")) {
@@ -35,67 +28,41 @@ export function LogIn() {
 
     useEffect(() => {
         setErrMsg("")
-    }, [ emailInput, pwdInput ])
+    }, [ user ])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log(e.target.rememberMe.checked)
         try{
             await monAxios
-                .post("user/login", { body:{ email: emailInput, password: pwdInput}})
+                .post(
+                    "user/login", 
+                    { 
+                        body:{
+                            email: e.target.email.value,
+                            password: e.target.password.value
+                        }
+                    }
+                )
                 .json()
                 .then((result) => {
-                    dispatch(modifyEmail(emailInput))
-                    dispatch(modifyPassword(pwdInput))
+                    dispatch(modifyEmail(e.target.email.value))
+                    dispatch(modifyPassword(e.target.password.value))
                     dispatch(connectedUser(true))
                     if (e.target.rememberMe.checked) {
                         dispatch(rememberMe())
                     }
                     StorageOver.setItem("jwtToken", result.body.token , e.target.rememberMe.checked )
-                    console.log(result)
                 })
             
-            // await monAxios
-            //     .post("user/profile", { headers: {'Authorization': 'Bearer' + localStorage.getItem("jwtToken")}})
-            //     .json()
-            //     .then((result) => {
-            //         console.log(result)
-            //         dispatch(modifyFistName(result.body.firstName))
-            //         dispatch(modifyLastName(result.body.lastName))
-            //         dispatch(modifyId(result.body.id))
-                    
-            //     })
-
-            
         } catch(error: any) {
-            console.log(error.message)
             setErrMsg(error.message)
         }
-        
-        console.log(user) 
-        console.log("----------------------")
     }
-    const handleDisconnect = async (e) => {
-        e.preventDefault()
-        dispatch(disconnectUser())
-        StorageOver.clear()
-        
-        console.log(user)
-        console.log("----------------------")
-    }
+
     return(
         <>
             <main className={styles["bg-dark"]}>
                 <section className={styles["sign-in-content"]}>
-                    {/* { user.connected ? (
-                        <>
-                            <h1>You are connected</h1>
-                            <p>
-                                <a href="/">Go home</a>
-                            </p>
-                            <button onClick={handleDisconnect}>disconnect</button>
-                        </>
-                    ) : ( */}
                         <>
                             { errMsg !== "" && <p  className= "errmsg">{ errMsg }</p> }
                             { (
@@ -112,9 +79,7 @@ export function LogIn() {
                                     <label htmlFor="email">Email</label>
                                     <input
                                         type="email"
-                                        id="email"
                                         name="email"
-                                        onChange={(e) => setEmailInput(e.target.value)}
                                         required
                                     />
                                 </div>
@@ -123,9 +88,7 @@ export function LogIn() {
                                     <label htmlFor="password">password</label>
                                     <input
                                         type="password"
-                                        id="password"
                                         name="password"
-                                        onChange={(e) => setPwdInput(e.target.value)}
                                         required
                                     />
                                 </div>
@@ -140,7 +103,6 @@ export function LogIn() {
                                 </button>
                             </form>
                         </>
-                    {/* )} */}
                 </section>
                     
             </main>

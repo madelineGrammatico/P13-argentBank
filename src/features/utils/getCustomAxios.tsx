@@ -12,12 +12,10 @@ export const getCustomAxios = (baseUrl: string, defaultRequest: RequestInit) => 
             },
             
         })
-        console.log(headers)
 
         return {
             json: async () => {
                 const response = await promise
-                console.log(response)
                 if (!response.ok) {
                     return Promise.reject(await response.json())
                 }
@@ -38,7 +36,6 @@ export const getCustomAxios = (baseUrl: string, defaultRequest: RequestInit) => 
             return fetch(url, {...config, method: 'GET'})
         },
         post: (url: string, config?: RequestInit) => {
-            // console.log(config?.headers)
             return fetch(url, {
                 // ...config,
                 method:'Post',

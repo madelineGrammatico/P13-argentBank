@@ -1,4 +1,3 @@
-// import { useEffect} from 'react'
 import { useState } from 'react'
 import { useDispatch } from "react-redux"
 import { monAxios } from '../../features/utils/getCustomAxios'
@@ -7,10 +6,6 @@ import styles from "./Profile.module.css"
 import { StorageOver } from "../../features/utils/storage"
 
 import { 
-  // connectedUser, 
-  // disconnectUser,
-  // rememberMe,
-  // modifyEmail, 
   modifyFistName,
   modifyId,
   modifyLastName,
@@ -28,9 +23,6 @@ export function Profile() {
         .post("user/profile", { headers: {'Authorization': 'Bearer' + StorageOver.getItem("jwtToken")}})
         .json()
         .then((result) => {
-            console.log(result)
-            console.log(result.body)
-
             dispatch(modifyFistName(result.body.firstName))
             dispatch(modifyLastName(result.body.lastName))
             dispatch(modifyId(result.body.id))

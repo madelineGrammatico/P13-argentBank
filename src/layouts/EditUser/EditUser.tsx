@@ -1,14 +1,9 @@
 import { useSelector, useDispatch } from "react-redux"
-import { useState} from 'react'
 
 import { StorageOver } from "../../features/utils/storage"
 import { monAxios } from '../../features/utils/getCustomAxios'
 import { 
-    // connectedUser, 
-    // disconnectUser,
-    // rememberMe,
     modifyEmail,
-    // modifyPassword, 
     modifyFistName, 
     modifyId, 
     modifyLastName, 
@@ -19,16 +14,20 @@ import styles from "./EditUser.module.css"
 export function EditUser({setShowEditComponent}) {
     const user = useSelector((state) => state.user)
     const dispatch = useDispatch()
-    const [ firstNameInput, setFirstNameInput ] = useState(user.firstName)
-    const [ lastNameInput, setLastNameInput ] = useState(user.lastName)
 
     const handleSubmit = async(e) => {
         e.preventDefault()
+        console.log(e.target.form.firstName.value)
         try{
             await monAxios
                 .put("user/profile", 
                     { headers: { 'Authorization': 'Bearer' + StorageOver.getItem("jwtToken") },
-                      body: { firstName: firstNameInput, lastName: lastNameInput }})
+                      body: 
+                        { 
+                            firstName: e.target.form.firstName.value || user.firstName,
+                            lastName: e.target.form.lastName.value || user.lastName
+                        }
+                    })
                 .json()
                 .then((result) => {
                     dispatch(modifyEmail(result.body.email))
@@ -49,17 +48,15 @@ export function EditUser({setShowEditComponent}) {
         <div className={styles["input-wrapper"]}>
             <label htmlFor="firstName" hidden>First Name</label>
             <input 
-                type="text" 
+                type="text"
                 name="firstName"
-                placeholder={firstNameInput}
-                onChange={(e) => setFirstNameInput(e.target.value)}
+                placeholder={user.firstName}
             />
             <label htmlFor="lastName" hidden>Last Name</label>
             <input 
                 type="text"
                 name="lastName"
-                placeholder={lastNameInput}
-                onChange={(e) => setLastNameInput(e.target.value)}
+                placeholder={user.lastName}
             />
         </div>
         <div className={styles["input-wrapper"]}>

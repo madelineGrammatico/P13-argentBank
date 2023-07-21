@@ -1,9 +1,6 @@
 import { useSelector, useDispatch} from "react-redux"
 import { disconnectUser } from "../../features/user/userSlice"
-import { 
-  // useNavigate,
-   NavLink 
-} from "react-router-dom"
+import { NavLink } from "react-router-dom"
 
 import { StorageOver } from "../../features/utils/storage"
 import styles from "./NavBar.module.css"
@@ -13,15 +10,10 @@ import logo from "../../assets/icons/argentBankLogo.png"
 export function NavBar() {
   const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
-  // const navigate = useNavigate()
 
   const handleDisconnect = async (e) => {
     dispatch(disconnectUser())
     StorageOver.clear()
-    // navigate("/")
-
-    console.log(user)
-    console.log("----------------------")
   }
 
   return (
