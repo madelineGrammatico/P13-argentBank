@@ -1,9 +1,9 @@
-import { useSelector } from "react-redux"
+import { useAppSelector } from "../../app/hooks"
 
 import styles from "./Greetings.module.css"
 
 export function Greetings({setShowEditComponent}) {
-    const user = useSelector((state) => state.user)
+  const user = useAppSelector((state) => state.user)
 
   return (
     <>

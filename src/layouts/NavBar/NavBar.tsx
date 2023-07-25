@@ -1,15 +1,16 @@
-import { useSelector, useDispatch} from "react-redux"
 import { disconnectUser } from "../../features/user/userSlice"
 import { NavLink } from "react-router-dom"
 
 import { StorageOver } from "../../features/utils/storage"
+import { useAppSelector, useAppDispatch} from "../../app/hooks"
+
 import styles from "./NavBar.module.css"
 
 import logo from "../../assets/icons/argentBankLogo.png"
 
 export function NavBar() {
-  const user = useSelector((state) => state.user)
-  const dispatch = useDispatch()
+  const user = useAppSelector((state) => state.user)
+  const dispatch = useAppDispatch()
 
   const handleDisconnect = async (e) => {
     dispatch(disconnectUser())

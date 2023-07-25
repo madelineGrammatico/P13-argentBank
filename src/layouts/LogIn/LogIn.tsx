@@ -1,6 +1,6 @@
 import { useState, useEffect} from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from 'react-router-dom'
+import { useAppSelector, useAppDispatch} from "../../app/hooks"
 import { monAxios } from '../../features/utils/getCustomAxios'
 
 import styles from "./LogIn.module.css"
@@ -11,8 +11,8 @@ import {
 import { StorageOver } from '../../features/utils/storage'
 
 export function LogIn() {
-    const user = useSelector((state) => state.user)
-    const dispatch = useDispatch() 
+    const user = useAppSelector((state) => state.user)
+    const dispatch = useAppDispatch() 
     const navigate = useNavigate()
     
     const [errMsg, setErrMsg] = useState("")
@@ -27,7 +27,7 @@ export function LogIn() {
         setErrMsg("")
     }, [ user ])
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<EventTarget>) => {
         e.preventDefault()
         try{
             await monAxios
@@ -67,7 +67,7 @@ export function LogIn() {
                                 <div className={styles["input-wrapper"]}>
                                     <label htmlFor="email">Email</label>
                                     <input
-                                        type="email"
+                                        type="emai"
                                         name="email"
                                         required
                                     />

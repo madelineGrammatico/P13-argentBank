@@ -1,5 +1,4 @@
-import { useSelector, useDispatch } from "react-redux"
-
+import { useAppSelector, useAppDispatch} from "../../app/hooks"
 import { StorageOver } from "../../features/utils/storage"
 import { monAxios } from '../../features/utils/getCustomAxios'
 import { 
@@ -10,8 +9,8 @@ import {
 import styles from "./EditUser.module.css"
 
 export function EditUser({ setShowEditComponent }) {
-    const user = useSelector((state) => state.user)
-    const dispatch = useDispatch()
+    const user = useAppSelector((state) => state.user)
+    const dispatch = useAppDispatch()
 
     const handleSubmit = async(e) => {
         e.preventDefault()
