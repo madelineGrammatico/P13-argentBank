@@ -21,7 +21,7 @@ export function LogIn() {
         if (StorageOver.getItem("jwtToken")) {
           navigate("/profile")
         }
-      }, [user])
+      }, [user, navigate])
 
     useEffect(() => {
         setErrMsg("")
@@ -29,25 +29,22 @@ export function LogIn() {
 
     const handleSubmit = async (e: React.FormEvent<EventTarget>) => {
         e.preventDefault()
+        const form = new FormData(e.target as HTMLFormElement)
+        const event = e.target as HTMLFormElement
+        const rememberMe = event.rememberMe.checked
         try{
-            await monAxios
-                .post(
-                    "user/login", 
-                    { 
-                        body:{
-                            email: e.target.email.value,
-                            password: e.target.password.value
-                        }
-                    }
-                )
-                .json()
-                .then((result) => {
-                    dispatch(connectedUser(true))
-                    StorageOver.setItem("jwtToken", result.body.token , e.target.rememberMe.checked )
-                })
-            
-        } catch(error: any) {
-            setErrMsg(error.message)
+            const result = await monAxios.post(
+                "user/login", 
+                { body: Object.fromEntries(form.entries())})
+            const data = await result.json()
+            dispatch(connectedUser(true))
+            StorageOver.setItem("jwtToken", data.body.token , rememberMe )
+        } catch(error){
+            if(error instanceof Error) {
+              setErrMsg(error.message)
+            } else {
+                console.log(error)
+            }
         }
     }
 
@@ -67,7 +64,7 @@ export function LogIn() {
                                 <div className={styles["input-wrapper"]}>
                                     <label htmlFor="email">Email</label>
                                     <input
-                                        type="emai"
+                                        type="email"
                                         name="email"
                                         required
                                     />

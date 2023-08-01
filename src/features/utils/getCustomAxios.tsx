@@ -37,24 +37,25 @@ export const getCustomAxios = (baseUrl: string, defaultRequest: RequestInit) => 
         },
         post: (url: string, config?: RequestInit) => {
             return fetch(url, {
-                // ...config,
-                method:'Post',
+                ...config,
+                method:'POST',
                 body: JSON.stringify(config?.body),
                 headers: {
                     ...config?.headers,
                 },
             })
         },
-        put: (url: string, config?: RequestInit) => {
+        put: (url: string, config: RequestInit) => {
+            console.log(config)
             return fetch(url, {
                 ...config,
                 method:'PUT',
-                body: JSON.stringify(config?.body),
+                body: JSON.stringify(config.body),
                 headers: {
-                    ...config?.headers,
+                    ...config.headers,
                 },
             })
-        },
+        }
     }
 }
 

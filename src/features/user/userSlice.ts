@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice, Draft } from "@reduxjs/toolkit";
 
 export type User = {
     email: string,
@@ -19,19 +19,19 @@ export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        modifyEmail:(state, action: PayloadAction<string>) => {
+        modifyEmail:(state: Draft<User>, action: PayloadAction<string>) => {
             state.email = action.payload
         },
-        modifyFistName:(state, action: PayloadAction<string>) => {
+        modifyFistName:(state: Draft<User>, action: PayloadAction<string>) => {
             state.firstName = action.payload
         },
-        modifyLastName:(state, action: PayloadAction<string>) => {
+        modifyLastName:(state: Draft<User>, action: PayloadAction<string>) => {
             state.lastName = action.payload
         },
-        modifyId:(state, action: PayloadAction<string>) => {
+        modifyId:(state: Draft<User>, action: PayloadAction<string>) => {
             state.id = action.payload
         },
-        connectedUser: (state, action: PayloadAction<boolean>) => {
+        connectedUser: (state: Draft<User>, action: PayloadAction<boolean>) => {
             state.connected = action.payload
         },
         disconnectUser: () => {

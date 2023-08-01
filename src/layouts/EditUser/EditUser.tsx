@@ -1,3 +1,4 @@
+import React, { useRef } from "react"
 import { useAppSelector, useAppDispatch} from "../../app/hooks"
 import { StorageOver } from "../../features/utils/storage"
 import { monAxios } from '../../features/utils/getCustomAxios'
@@ -8,28 +9,30 @@ import {
 
 import styles from "./EditUser.module.css"
 
-export function EditUser({ setShowEditComponent }) {
+export function EditUser({ setShowEditComponent }: { setShowEditComponent: React.Dispatch<React.SetStateAction<boolean>> }) {
     const user = useAppSelector((state) => state.user)
     const dispatch = useAppDispatch()
+    const formRef = useRef<HTMLFormElement>(null)
 
-    const handleSubmit = async(e) => {
+    const handleSubmit = async(e: React.FormEvent<EventTarget>) => {
         e.preventDefault()
+        if(!formRef.current) return
+        const form = new FormData(formRef.current)
+        const firstName =  form.get("firstName") || user.firstName
+        const lastName = form.get("lastName") || user.lastName
+        form.set("firstName", firstName)
+        form.set("lastName", lastName)
         try{
-            await monAxios
-                .put("user/profile", 
-                    { headers: { 'Authorization': 'Bearer' + StorageOver.getItem("jwtToken") },
-                      body: 
-                        { 
-                            firstName: e.target.form.firstName.value || user.firstName,
-                            lastName: e.target.form.lastName.value || user.lastName
-                        }
-                    })
-                .json()
-                .then((result) => {
-                    dispatch(modifyFistName(result.body.firstName))
-                    dispatch(modifyLastName(result.body.lastName))
+            const result = monAxios.put(
+                "user/profile", 
+                { 
+                    headers: { 'Authorization': 'Bearer' + StorageOver.getItem("jwtToken") },
+                    body: Object.fromEntries(form),
                 })
-                setShowEditComponent(false)
+            const data = await result.json()
+            dispatch(modifyFistName(data.body.firstName))
+            dispatch(modifyLastName(data.body.lastName))
+            setShowEditComponent(false)
         } catch(error) {
             console.log(error)
         }
@@ -37,7 +40,7 @@ export function EditUser({ setShowEditComponent }) {
     }
 
   return (
-    <form>
+    <form ref={ formRef }>
         <h2>Welcome back</h2>
         <div className={styles["input-wrapper"]}>
             <label htmlFor="firstName" hidden>First Name</label>
@@ -54,8 +57,8 @@ export function EditUser({ setShowEditComponent }) {
             />
         </div>
         <div className={styles["input-wrapper"]}>
-            <button onClick={ handleSubmit }>Save</button>
-            <button onClick={() => setShowEditComponent(false)}>Cancel</button>
+            <button onClick={ handleSubmit } type="submit">Save</button>
+            <button onClick={() => setShowEditComponent(false)} type="button">Cancel</button>
         </div>
         
     </form>
