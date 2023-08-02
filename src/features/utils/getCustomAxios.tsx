@@ -46,7 +46,6 @@ export const getCustomAxios = (baseUrl: string, defaultRequest: RequestInit) => 
             })
         },
         put: (url: string, config: RequestInit) => {
-            console.log(config)
             return fetch(url, {
                 ...config,
                 method:'PUT',

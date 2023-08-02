@@ -22,12 +22,13 @@ export function EditUser({ setShowEditComponent }: { setShowEditComponent: React
         const lastName = form.get("lastName") || user.lastName
         form.set("firstName", firstName)
         form.set("lastName", lastName)
+        const formData = new URLSearchParams(form as unknown as Record<string, string>)
         try{
             const result = monAxios.put(
                 "user/profile", 
                 { 
                     headers: { 'Authorization': 'Bearer' + StorageOver.getItem("jwtToken") },
-                    body: Object.fromEntries(form),
+                    body: formData,
                 })
             const data = await result.json()
             dispatch(modifyFistName(data.body.firstName))

@@ -32,10 +32,11 @@ export function LogIn() {
         const form = new FormData(e.target as HTMLFormElement)
         const event = e.target as HTMLFormElement
         const rememberMe = event.rememberMe.checked
+        const formData = new URLSearchParams(form as unknown as Record<string, string>)
         try{
             const result = await monAxios.post(
                 "user/login", 
-                { body: Object.fromEntries(form.entries())})
+                { body: formData})
             const data = await result.json()
             dispatch(connectedUser(true))
             StorageOver.setItem("jwtToken", data.body.token , rememberMe )
