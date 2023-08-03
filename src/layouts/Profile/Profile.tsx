@@ -1,17 +1,25 @@
-import { useState } from 'react'
-
-import { getData } from '../../features/utils/getData'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAppSelector} from "../../app/hooks"
 
 import { Greetings } from '../Greetings/Greetings'
 import { EditUser } from '../EditUser/EditUser'
 
+import { StorageOver } from '../../features/utils/storage'
+
 import styles from "./Profile.module.css"
 
 export function Profile() {
+  const navigate = useNavigate()
+  const user = useAppSelector((state) => state.user)
   const [showEditCompoment, setShowEditComponent] = useState(false)
-
-  getData()
-
+  useEffect(() => {
+    if (!StorageOver.getItem("jwtToken")) {
+      console.log("dans la condition")
+      navigate("/login")
+    }
+    }, [user, navigate]
+)
   return (
     
     <main className={styles["bg-dark"]}>

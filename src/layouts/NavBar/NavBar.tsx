@@ -2,6 +2,7 @@ import { disconnectUser } from "../../features/user/userSlice"
 import { NavLink } from "react-router-dom"
 
 import { StorageOver } from "../../features/utils/storage"
+import { getData } from '../../features/utils/getData'
 import { useAppSelector, useAppDispatch} from "../../app/hooks"
 
 import styles from "./NavBar.module.css"
@@ -11,8 +12,11 @@ import logo from "../../assets/icons/argentBankLogo.png"
 export function NavBar() {
   const user = useAppSelector((state) => state.user)
   const dispatch = useAppDispatch()
-
-  const handleDisconnect = async (e) => {
+  if (StorageOver.isStorage("jwtToken") && !user.connected) {
+    getData()
+  }
+  const handleDisconnect = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
     dispatch(disconnectUser())
     StorageOver.clear()
   }

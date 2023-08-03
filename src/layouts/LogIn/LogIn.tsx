@@ -21,7 +21,8 @@ export function LogIn() {
         if (StorageOver.getItem("jwtToken")) {
           navigate("/profile")
         }
-      }, [user, navigate])
+        }, [user, navigate]
+    )
 
     useEffect(() => {
         setErrMsg("")
@@ -32,11 +33,11 @@ export function LogIn() {
         const form = new FormData(e.target as HTMLFormElement)
         const event = e.target as HTMLFormElement
         const rememberMe = event.rememberMe.checked
-        const formData = new URLSearchParams(form as unknown as Record<string, string>)
+        // const formData = new URLSearchParams(form as unknown as Record<string, string>)
         try{
             const result = await monAxios.post(
                 "user/login", 
-                { body: formData})
+                { body: Object.fromEntries(form) as unknown as BodyInit })
             const data = await result.json()
             dispatch(connectedUser(true))
             StorageOver.setItem("jwtToken", data.body.token , rememberMe )
@@ -52,46 +53,44 @@ export function LogIn() {
     const errorMessage = (errMsg !== "")? <p  className= "errmsg">{ errMsg }</p> : null 
 
     return(
-        <>
-            <main className={styles["bg-dark"]}>
-                <section className={styles["sign-in-content"]}>
-                        <>
-                            { errorMessage}
+        <main className={styles["bg-dark"]}>
+            <section className={styles["sign-in-content"]}>
+                    <>
+                        { errorMessage}
+                        
+                        <i className="fa fa-user-circle sign-in-icon"/>
+                        <h1>Sign In</h1>
+
+                        <form id="formElem" onSubmit={handleSubmit}>
+                            <div className={styles["input-wrapper"]}>
+                                <label htmlFor="email">Email</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    required
+                                />
+                            </div>
+
+                            <div className={styles["input-wrapper"]}>
+                                <label htmlFor="password">password</label>
+                                <input
+                                    type="password"
+                                    name="password"
+                                    required
+                                />
+                            </div>
                             
-                            <i className="fa fa-user-circle sign-in-icon"/>
-                            <h1>Sign In</h1>
-
-                            <form id="formElem" onSubmit={handleSubmit}>
-                                <div className={styles["input-wrapper"]}>
-                                    <label htmlFor="email">Email</label>
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        required
-                                    />
-                                </div>
-
-                                <div className={styles["input-wrapper"]}>
-                                    <label htmlFor="password">password</label>
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        required
-                                    />
-                                </div>
-                                
-                                <div className={styles["input-wrapper-remember"]}>
-                                    <input type="checkbox" id="rememberMe" name="rememberMe"/>
-                                    <label htmlFor="rememberMe" >Remember me</label>
-                                </div>
-                                
-                                <button className={styles["sign-in-button"]}>
-                                    Sign In
-                                </button>
-                            </form>
-                        </>
-                </section>
-            </main>
-        </>
+                            <div className={styles["input-wrapper-remember"]}>
+                                <input type="checkbox" id="rememberMe" name="rememberMe"/>
+                                <label htmlFor="rememberMe" >Remember me</label>
+                            </div>
+                            
+                            <button className={styles["sign-in-button"]}>
+                                Sign In
+                            </button>
+                        </form>
+                    </>
+            </section>
+        </main>
     )
 }

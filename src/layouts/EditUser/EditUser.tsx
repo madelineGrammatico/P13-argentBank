@@ -10,6 +10,7 @@ import {
 import styles from "./EditUser.module.css"
 
 export function EditUser({ setShowEditComponent }: { setShowEditComponent: React.Dispatch<React.SetStateAction<boolean>> }) {
+    
     const user = useAppSelector((state) => state.user)
     const dispatch = useAppDispatch()
     const formRef = useRef<HTMLFormElement>(null)
@@ -22,13 +23,13 @@ export function EditUser({ setShowEditComponent }: { setShowEditComponent: React
         const lastName = form.get("lastName") || user.lastName
         form.set("firstName", firstName)
         form.set("lastName", lastName)
-        const formData = new URLSearchParams(form as unknown as Record<string, string>)
+        // const formData = new URLSearchParams(form as unknown as Record<string, string>)
         try{
             const result = monAxios.put(
                 "user/profile", 
                 { 
                     headers: { 'Authorization': 'Bearer' + StorageOver.getItem("jwtToken") },
-                    body: formData,
+                    body: Object.fromEntries(form) as unknown as BodyInit
                 })
             const data = await result.json()
             dispatch(modifyFistName(data.body.firstName))

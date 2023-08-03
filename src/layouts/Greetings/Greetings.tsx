@@ -1,9 +1,11 @@
 import { useAppSelector } from "../../app/hooks"
+import { getData } from '../../features/utils/getData'
 
 import styles from "./Greetings.module.css"
 
 export function Greetings({setShowEditComponent}: { setShowEditComponent: React.Dispatch<React.SetStateAction<boolean>> }) {
   const user = useAppSelector((state) => state.user)
+    getData()
 
   return (
     <>

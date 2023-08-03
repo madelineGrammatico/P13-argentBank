@@ -32,9 +32,6 @@ export const getCustomAxios = (baseUrl: string, defaultRequest: RequestInit) => 
     }
 
     return {
-        get: (url: string, config?: RequestInit) => {
-            return fetch(url, {...config, method: 'GET'})
-        },
         post: (url: string, config?: RequestInit) => {
             return fetch(url, {
                 ...config,
