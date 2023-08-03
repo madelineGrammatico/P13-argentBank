@@ -1,15 +1,7 @@
-import { StorageOver } from '../../features/utils/storage'
-import { getData } from '../../features/utils/getData'
-
 import styles from "./Accueil.module.css"
 import chatIcon from "../../assets/icons/icon-chat.png"
-import { useAppSelector} from "../../app/hooks"
 
 export function Accueil() {
-  const user = useAppSelector((state) => state.user)
-  if (StorageOver.isStorage("jwtToken") && !user.connected) {
-    getData()
-  }
   
   return (
     <main>

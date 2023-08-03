@@ -23,7 +23,7 @@ export function EditUser({ setShowEditComponent }: { setShowEditComponent: React
         const lastName = form.get("lastName") || user.lastName
         form.set("firstName", firstName)
         form.set("lastName", lastName)
-        // const formData = new URLSearchParams(form as unknown as Record<string, string>)
+
         try{
             const result = monAxios.put(
                 "user/profile", 
@@ -36,7 +36,7 @@ export function EditUser({ setShowEditComponent }: { setShowEditComponent: React
             dispatch(modifyLastName(data.body.lastName))
             setShowEditComponent(false)
         } catch(error) {
-            console.log(error)
+            console.error(error)
         }
         
     }

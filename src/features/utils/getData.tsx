@@ -20,9 +20,9 @@ export async function getData() {
         })
       } catch(error){
         if(error instanceof Error) {
-          console.log(error.message)
+          console.error(error.message)
         } else {
-            console.log(error)
+            console.error(error)
         }
     }
   }

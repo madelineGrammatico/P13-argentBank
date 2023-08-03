@@ -15,7 +15,6 @@ export function Profile() {
   const [showEditCompoment, setShowEditComponent] = useState(false)
   useEffect(() => {
     if (!StorageOver.getItem("jwtToken")) {
-      console.log("dans la condition")
       navigate("/login")
     }
     }, [user, navigate]

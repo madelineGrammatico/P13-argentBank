@@ -33,7 +33,7 @@ export function LogIn() {
         const form = new FormData(e.target as HTMLFormElement)
         const event = e.target as HTMLFormElement
         const rememberMe = event.rememberMe.checked
-        // const formData = new URLSearchParams(form as unknown as Record<string, string>)
+
         try{
             const result = await monAxios.post(
                 "user/login", 
@@ -45,7 +45,7 @@ export function LogIn() {
             if(error instanceof Error) {
               setErrMsg(error.message)
             } else {
-                console.log(error)
+                console.error(error)
             }
         }
     }
